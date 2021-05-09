@@ -5,7 +5,7 @@
 -- Dumped from database version 13.2
 -- Dumped by pg_dump version 13.2
 
--- Started on 2021-05-09 19:25:02
+-- Started on 2021-05-10 00:23:01
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -20,7 +20,7 @@ SET row_security = off;
 
 DROP DATABASE "HRMS";
 --
--- TOC entry 3030 (class 1262 OID 17377)
+-- TOC entry 3036 (class 1262 OID 17377)
 -- Name: HRMS; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -71,7 +71,7 @@ CREATE TABLE public.employers (
     "UserId" integer NOT NULL,
     "CompanyName" character varying(100) NOT NULL,
     "Phone" character(12) NOT NULL,
-    "VerifiedBysystem" boolean NOT NULL,
+    "VerifiedBySystem" boolean NOT NULL,
     "Website" character varying(100) NOT NULL
 );
 
@@ -165,7 +165,7 @@ ALTER TABLE public.users ALTER COLUMN "Id" ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
--- TOC entry 3017 (class 0 OID 17378)
+-- TOC entry 3023 (class 0 OID 17378)
 -- Dependencies: 200
 -- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -174,16 +174,16 @@ INSERT INTO public.employees ("UserId", "FirstName", "LastName", "NationalityId"
 
 
 --
--- TOC entry 3018 (class 0 OID 17381)
+-- TOC entry 3024 (class 0 OID 17381)
 -- Dependencies: 201
 -- Data for Name: employers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.employers ("UserId", "CompanyName", "Phone", "VerifiedBysystem", "Website") VALUES (2, 'kodlamaio', '905123456789', false, 'www.kodlama.io');
+INSERT INTO public.employers ("UserId", "CompanyName", "Phone", "VerifiedBySystem", "Website") VALUES (2, 'kodlamaio', '905123456789', false, 'www.kodlama.io');
 
 
 --
--- TOC entry 3019 (class 0 OID 17384)
+-- TOC entry 3025 (class 0 OID 17384)
 -- Dependencies: 202
 -- Data for Name: jobpositions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -192,7 +192,7 @@ INSERT INTO public.jobpositions ("Id", "PositionName") OVERRIDING SYSTEM VALUE V
 
 
 --
--- TOC entry 3021 (class 0 OID 17392)
+-- TOC entry 3027 (class 0 OID 17392)
 -- Dependencies: 204
 -- Data for Name: systemusers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -201,7 +201,7 @@ INSERT INTO public.systemusers ("UserId", "Roles") VALUES (3, 'sysadmin');
 
 
 --
--- TOC entry 3022 (class 0 OID 17398)
+-- TOC entry 3028 (class 0 OID 17398)
 -- Dependencies: 205
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -212,7 +212,7 @@ INSERT INTO public.users ("Id", "Email", "Password", "EmailVerified") OVERRIDING
 
 
 --
--- TOC entry 3031 (class 0 OID 0)
+-- TOC entry 3037 (class 0 OID 0)
 -- Dependencies: 207
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -221,7 +221,7 @@ SELECT pg_catalog.setval('public.hibernate_sequence', 1, false);
 
 
 --
--- TOC entry 3032 (class 0 OID 0)
+-- TOC entry 3038 (class 0 OID 0)
 -- Dependencies: 203
 -- Name: jobpositions_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -230,7 +230,7 @@ SELECT pg_catalog.setval('public."jobpositions_Id_seq"', 1, true);
 
 
 --
--- TOC entry 3033 (class 0 OID 0)
+-- TOC entry 3039 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: users_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -239,7 +239,7 @@ SELECT pg_catalog.setval('public."users_Id_seq"', 3, true);
 
 
 --
--- TOC entry 2881 (class 2606 OID 17408)
+-- TOC entry 2887 (class 2606 OID 17408)
 -- Name: users Email; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -248,7 +248,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2877 (class 2606 OID 17410)
+-- TOC entry 2881 (class 2606 OID 17410)
 -- Name: jobpositions Id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -257,7 +257,7 @@ ALTER TABLE ONLY public.jobpositions
 
 
 --
--- TOC entry 2879 (class 2606 OID 17412)
+-- TOC entry 2883 (class 2606 OID 17412)
 -- Name: jobpositions PositionName; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -275,7 +275,34 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2883 (class 2606 OID 17416)
+-- TOC entry 2877 (class 2606 OID 17470)
+-- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employees
+    ADD CONSTRAINT employees_pkey PRIMARY KEY ("UserId");
+
+
+--
+-- TOC entry 2879 (class 2606 OID 17472)
+-- Name: employers employers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employers
+    ADD CONSTRAINT employers_pkey PRIMARY KEY ("UserId");
+
+
+--
+-- TOC entry 2885 (class 2606 OID 17474)
+-- Name: systemusers systemusers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.systemusers
+    ADD CONSTRAINT systemusers_pkey PRIMARY KEY ("UserId");
+
+
+--
+-- TOC entry 2889 (class 2606 OID 17416)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -284,7 +311,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2884 (class 2606 OID 17417)
+-- TOC entry 2890 (class 2606 OID 17417)
 -- Name: employees UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -293,7 +320,7 @@ ALTER TABLE ONLY public.employees
 
 
 --
--- TOC entry 2885 (class 2606 OID 17422)
+-- TOC entry 2891 (class 2606 OID 17422)
 -- Name: employers UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -302,7 +329,7 @@ ALTER TABLE ONLY public.employers
 
 
 --
--- TOC entry 2886 (class 2606 OID 17427)
+-- TOC entry 2892 (class 2606 OID 17427)
 -- Name: systemusers UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -310,7 +337,7 @@ ALTER TABLE ONLY public.systemusers
     ADD CONSTRAINT "UserId" FOREIGN KEY ("UserId") REFERENCES public.users("Id");
 
 
--- Completed on 2021-05-09 19:25:02
+-- Completed on 2021-05-10 00:23:02
 
 --
 -- PostgreSQL database dump complete
