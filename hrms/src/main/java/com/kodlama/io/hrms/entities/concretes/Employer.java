@@ -6,11 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name="Employers")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employer {
 	
 	@Id
