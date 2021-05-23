@@ -31,5 +31,14 @@ public class User {
 	
 	@Column(name="emailVerified",nullable=false)
 	private boolean emailVerified;
+
+	@Column(name="emailVerifyCode",nullable=false)
+	private String emailVerifyCode;
 	
+	public User(String email, String password, boolean emailVerified, String emailVerifyCode) {
+		this.email = email;
+		this.password = password;
+		this.emailVerified = emailVerified;
+		this.emailVerifyCode = emailVerifyCode;
+	}
 }

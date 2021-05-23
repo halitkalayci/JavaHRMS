@@ -30,3 +30,6 @@ hs_err_pid*
 .metadata/
 .metadata
 **/metadata/*
+.mvn
+.test/
+test/

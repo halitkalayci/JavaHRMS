@@ -1,10 +1,15 @@
 package com.kodlama.io.hrms.entities.concretes;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -34,4 +39,15 @@ public class Employee {
 	@Column(name="`BirthOfDate`",nullable=false)
 	private Date birthOfDate;
 	
+	@OneToOne(fetch = FetchType.LAZY)	
+	@JoinColumn(name="`UserId`")
+	private User user;
+
+	public Employee(int userId, String firstName, String lastName, String nationalityId, Date birthOfDate) {
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.nationalityId = nationalityId;
+		this.birthOfDate = birthOfDate;
+	}
 }
