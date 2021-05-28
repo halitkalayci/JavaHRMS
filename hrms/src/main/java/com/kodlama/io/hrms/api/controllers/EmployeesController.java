@@ -14,7 +14,6 @@ import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
 import com.kodlama.io.hrms.entities.concretes.Employee;
 import com.kodlama.io.hrms.entities.concretes.dtos.EmployeeForRegisterDto;
-import com.kodlama.io.hrms.entities.concretes.dtos.EmployerForRegisterDto;
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeesController {

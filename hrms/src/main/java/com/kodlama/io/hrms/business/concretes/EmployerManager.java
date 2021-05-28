@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kodlama.io.hrms.business.abstracts.EmployerService;
 import com.kodlama.io.hrms.business.abstracts.UserService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
+import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
 import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
@@ -44,6 +45,12 @@ public class EmployerManager implements EmployerService {
 		this.employerDao.save(employerToRegister);
 		return new SuccessResult("İş veren başarıyla kayıt oldu. Lütfen e-posta adresinize gönderilen linke tıklayarak üyeliğinizi doğrulayın.");
 	}
+	@Override
+	public DataResult<Employer> getById(int id) {
+		Employer employer = employerDao.getOne(id);
+		if(employer==null) return new ErrorDataResult<Employer>();
+		return new SuccessDataResult<Employer>(employer);
+	}
 
 	private Result runAllRegisterRules(EmployerForRegisterDto employer) {
 		if(isAllFieldsFilled(employer) != null) return isAllFieldsFilled(employer);
@@ -74,6 +81,8 @@ public class EmployerManager implements EmployerService {
 		if(userService.getByEmail(employer.getEmail()).getData() != null) return new ErrorResult("Bu e-posta adresiyle kayıtlı bir kullanıcı var.");
 		return null;
 	}
+
+
 	
 
 }
