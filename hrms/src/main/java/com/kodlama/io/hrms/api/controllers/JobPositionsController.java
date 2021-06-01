@@ -28,12 +28,12 @@ public class JobPositionsController {
 	
 
 	@GetMapping("/getall")
-	public List<JobPosition> getAll(){
+	public DataResult<List<JobPosition>> getAll(){
 		return this.jobPositionService.getAll();
 	}
 	
 	@GetMapping("/getbyname")
-	public JobPosition getByPositionName(String positionName){
+	public DataResult<JobPosition> getByPositionName(String positionName){
 		return this.jobPositionService.getByPositionName(positionName);
 	}
 	@GetMapping("/getbyid")

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kodlama.io.hrms.business.abstracts.EmployerService;
 import com.kodlama.io.hrms.business.abstracts.UserService;
+import com.kodlama.io.hrms.core.utilities.business.BusinessRules;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorResult;
@@ -17,7 +18,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.EmployerDao;
 import com.kodlama.io.hrms.entities.concretes.Employer;
 import com.kodlama.io.hrms.entities.concretes.User;
-import com.kodlama.io.hrms.entities.concretes.dtos.EmployerForRegisterDto;
+import com.kodlama.io.hrms.entities.dtos.EmployerForRegisterDto;
 
 @Service
 public class EmployerManager implements EmployerService {
@@ -38,11 +39,21 @@ public class EmployerManager implements EmployerService {
 
 	@Override
 	public Result register(EmployerForRegisterDto employer) {
-		if(runAllRegisterRules(employer) != null) return runAllRegisterRules(employer);
+		Result businessResults = BusinessRules.run(
+				isPasswordsSame(employer.getPassword(), employer.getVerifyPassword()),
+				isEmailandWebsiteDomainSame(employer.getEmail(), employer.getWebsite()),
+				isEmailAlreadyInUse(employer.getEmail())
+				);
+		if(businessResults !=  null) return businessResults;
+		
+		
+		// Maybe add AUTOMAPPER?
 		User userToRegister = new User(employer.getEmail(), employer.getPassword(),false, UUID.randomUUID().toString());
 		userService.add(userToRegister);
+		
 		Employer employerToRegister = new Employer(userToRegister.getId(),employer.getCompanyName(),employer.getPhone(), false, employer.getWebsite());
 		this.employerDao.save(employerToRegister);
+		
 		return new SuccessResult("İş veren başarıyla kayıt oldu. Lütfen e-posta adresinize gönderilen linke tıklayarak üyeliğinizi doğrulayın.");
 	}
 	@Override
@@ -52,33 +63,18 @@ public class EmployerManager implements EmployerService {
 		return new SuccessDataResult<Employer>(employer);
 	}
 
-	private Result runAllRegisterRules(EmployerForRegisterDto employer) {
-		if(isAllFieldsFilled(employer) != null) return isAllFieldsFilled(employer);
-		if(isPasswordsSame(employer) != null) return isPasswordsSame(employer);
-		if(isEmailandWebsiteDomainSame(employer) != null) return isEmailandWebsiteDomainSame(employer);
-		if(isEmailAlreadyInUse(employer) != null) return isEmailAlreadyInUse(employer);
+	
+	private Result isPasswordsSame(String password, String passwordConfirm) {
+		if(!password.equals(passwordConfirm)) return new ErrorResult("Şifreleriniz uyuşmuyor.");
 		return null;
 	}
-
-	private Result isAllFieldsFilled(EmployerForRegisterDto employer) {
-		if(employer.getCompanyName() == null || employer.getPhone() == null || employer.getWebsite() == null || employer.getEmail() == null ||
-				   employer.getPassword() == null || employer.getVerifyPassword() == null) return new ErrorResult("Hiç bir alan boş bırakılmamalıdır.");
-		if(employer.getCompanyName().equals("") || employer.getPhone().equals("") || employer.getWebsite().equals("") || employer.getEmail().equals("") ||
-				   employer.getPassword().equals("") || employer.getVerifyPassword().equals("")) return new ErrorResult("Hiç bir alan boş bırakılmamalıdır.");
-		return null;
-	}	
-	private Result isPasswordsSame(EmployerForRegisterDto employer) {
-		if(!employer.getPassword().equals(employer.getVerifyPassword())) return new ErrorResult("Şifreleriniz uyuşmuyor.");
-		return null;
-	}
-	private Result isEmailandWebsiteDomainSame(EmployerForRegisterDto employer) {
-		String email = employer.getEmail();
+	private Result isEmailandWebsiteDomainSame(String email, String website) {
 		String[] emailSplit = email.split("@");
-		if(!emailSplit[1].equals(employer.getWebsite())) return new ErrorResult("E-posta adresinizin domaini web siteniz ile aynı olmalıdır.");
+		if(!emailSplit[1].equals(website)) return new ErrorResult("E-posta adresinizin domaini web siteniz ile aynı olmalıdır.");
 		return null;
 	}
-	private Result isEmailAlreadyInUse(EmployerForRegisterDto employer) {
-		if(userService.getByEmail(employer.getEmail()).getData() != null) return new ErrorResult("Bu e-posta adresiyle kayıtlı bir kullanıcı var.");
+	private Result isEmailAlreadyInUse(String email) {
+		if(userService.getByEmail(email).getData() != null) return new ErrorResult("Bu e-posta adresiyle kayıtlı bir kullanıcı var.");
 		return null;
 	}
 

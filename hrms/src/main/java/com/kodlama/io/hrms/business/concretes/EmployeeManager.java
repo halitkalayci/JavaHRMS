@@ -1,5 +1,7 @@
 package com.kodlama.io.hrms.business.concretes;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.kodlama.io.hrms.business.abstracts.EmployeeService;
 import com.kodlama.io.hrms.business.abstracts.UserService;
 import com.kodlama.io.hrms.core.utilities.IdentityValidationService;
+import com.kodlama.io.hrms.core.utilities.business.BusinessRules;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
@@ -17,7 +20,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.EmployeeDao;
 import com.kodlama.io.hrms.entities.concretes.Employee;
 import com.kodlama.io.hrms.entities.concretes.User;
-import com.kodlama.io.hrms.entities.concretes.dtos.EmployeeForRegisterDto;
+import com.kodlama.io.hrms.entities.dtos.EmployeeForRegisterDto;
 
 @Service
 public class EmployeeManager implements EmployeeService{
@@ -39,17 +42,26 @@ public class EmployeeManager implements EmployeeService{
 	}
 
 	@Override
-	public Result register(EmployeeForRegisterDto employee) {
-		if(runAllRules(employee) != null) return runAllRules(employee);
+	public Result register(EmployeeForRegisterDto employee) {	
+		Result businessRules = BusinessRules.run(
+				isPasswordsMatch(employee.getPassword(), employee.getVerifyPassword()),
+				isUserExistWithEmail(employee.getEmail()),
+				isUserExistWithNationalityId(employee.getNationalityId())
+				);
+		if(businessRules!=null) return businessRules;
 		
-	if(!identityValidationService.validate(employee.getNationalityId(), 
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(employee.getDateOfBirth());
+		if(!identityValidationService.validate(employee.getNationalityId(), 
 			employee.getFirstName(), 
 			employee.getLastName(), 			
-			employee.getDateOfBirth().getYear()).isSuccess()) {
+			calendar.get(Calendar.YEAR)).isSuccess()) {
 			return new ErrorResult("TC Kimlik Numarası doğrulaması başarısız.");
 		}
+		
 		User userToRegister = new User(employee.getEmail(), employee.getPassword(),false, UUID.randomUUID().toString());
 		userService.add(userToRegister);
+		
 		Employee employeeToRegister = new Employee(userToRegister.getId(), 
 				employee.getFirstName(),
 				employee.getLastName(), 
@@ -59,43 +71,25 @@ public class EmployeeManager implements EmployeeService{
 		return new SuccessResult("İş arayan kayıdı başarılı. Lütfen e-posta adresinize gönderilen doğrulama linkiyle hesabınızı doğrulayınız.");
 	}
 	
-	private Result runAllRules(EmployeeForRegisterDto employee) {
-		if(isAllFieldsFilled(employee) != null) return isAllFieldsFilled(employee);
-		if(isPasswordsMatch(employee) != null) return isPasswordsMatch(employee);
-		if(isUserExistWithEmail(employee) != null) return isUserExistWithEmail(employee);
-		if(isUserExistWithNationalityId(employee) != null) return isUserExistWithNationalityId(employee);
-		
-		return null;
-	}
 	
 	
-	private Result isAllFieldsFilled(EmployeeForRegisterDto employee) {
-		if(   employee.getVerifyPassword() == null || employee.getVerifyPassword().equals("") 
-		  ||  employee.getPassword() == null  || employee.getPassword().equals("")
-		  ||  employee.getEmail() == null || employee.getEmail().equals("")
-		  ||  employee.getNationalityId() == null ||  employee.getNationalityId().equals("")
-		  ||  employee.getLastName() == null || employee.getLastName().equals("")
-		  ||  employee.getFirstName() == null || employee.getFirstName().equals("")
-		  ||  employee.getDateOfBirth() == null)
-			return new ErrorResult("Tüm alanları doldurmalısınız.");
-		return null;
-	}
-	private Result isPasswordsMatch(EmployeeForRegisterDto employee) {
-		if(!employee.getPassword().equals(employee.getVerifyPassword())) {
+	
+	private Result isPasswordsMatch(String password, String passwordVerify) {
+		if(!password.equals(passwordVerify)) {
 			return new ErrorResult("Şifreler uyuşmalıdır.");
 		}
-		return null;
+		return new SuccessResult();
 	}
 	
-	private Result isUserExistWithEmail(EmployeeForRegisterDto employee) {
-		if(userService.getByEmail(employee.getEmail()).getData() != null)
+	private Result isUserExistWithEmail(String email) {
+		if(userService.getByEmail(email).getData() != null)
 			return new ErrorResult("Bu e-posta adresiyle başka bir kullanıcı mevcut.");
-		return null;
+		return new SuccessResult();
 	}
-	private Result isUserExistWithNationalityId(EmployeeForRegisterDto employee) {
-		if(employeeDao.findByNationalityId(employee.getNationalityId()) != null)
+	private Result isUserExistWithNationalityId(String nationalityId) {
+		if(employeeDao.findByNationalityId(nationalityId) != null)
 			return new ErrorResult("Bu TCKN ile başka bir kullanıcı mevcut.");
-		return null;
+		return new SuccessResult();
 	}
 
 }

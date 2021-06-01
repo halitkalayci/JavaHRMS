@@ -14,7 +14,7 @@ import com.kodlama.io.hrms.business.abstracts.JobAdvertisementService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
 import com.kodlama.io.hrms.entities.concretes.JobAdvertisement;
-import com.kodlama.io.hrms.entities.concretes.dtos.JobAdvertisementForAddDto;
+import com.kodlama.io.hrms.entities.dtos.JobAdvertisementForAddDto;
 
 @RestController
 @RequestMapping("/api/jobadvertisements")

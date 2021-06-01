@@ -18,7 +18,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
 import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.JobAdvertisementDao;
 import com.kodlama.io.hrms.entities.concretes.JobAdvertisement;
-import com.kodlama.io.hrms.entities.concretes.dtos.JobAdvertisementForAddDto;
+import com.kodlama.io.hrms.entities.dtos.JobAdvertisementForAddDto;
 
 
 @Service

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kodlama.io.hrms.business.abstracts.UserService;
-import com.kodlama.io.hrms.core.utilities.helpers.email.EmailService;
+import com.kodlama.io.hrms.core.utilities.mail.EmailService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
