@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,7 +48,12 @@ public class Employee {
 	private User user;
 	
 	@OneToMany(mappedBy="employee")
+	@JsonIgnore()
 	Set<EmployeeSchoolDepartment> employeeSchoolDepartments;
+
+	@OneToMany(mappedBy="employee")
+	@JsonIgnore()
+	Set<Resume> resumees;
 
 	public Employee(int userId, String firstName, String lastName, String nationalityId, Date birthOfDate) {
 		this.userId = userId;

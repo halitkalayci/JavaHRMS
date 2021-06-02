@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +30,7 @@ import lombok.NoArgsConstructor;
 public class Resume {
 	 @Id()
      @GeneratedValue(strategy = GenerationType.IDENTITY)
-     @Column(name = "id")
+     @Column(name = "resume_id")
      private int id;
 	 
 	 
@@ -47,13 +50,27 @@ public class Resume {
 	 private Date createDate;
 	 
 	 
+
+	 
+	 @ManyToOne()
+	 @JoinColumn(name = "employee_id")
+	 @JsonIgnore
+	 private Employee employee;
+	 
 	 @OneToMany(mappedBy="resume")
+	 @JsonIgnore
+	 private Set<JobExperience> jobExperiences;
+	 
+	 @OneToMany(mappedBy="resume")
+	 @JsonIgnore()
 	 Set<ResumeForeignLanguage> resumeForeignLanguages;
 	 
+	 
 	 @ManyToMany()
+	 @JsonIgnore
 	 @JoinTable(
 			   name = "resume_skills", 
 			   joinColumns = @JoinColumn(name = "resume_id"), 
 			   inverseJoinColumns = @JoinColumn(name = "skill_id"))
-	 private Set<Resume> resumes;
+	 private Set<Skill> skills;
 }
