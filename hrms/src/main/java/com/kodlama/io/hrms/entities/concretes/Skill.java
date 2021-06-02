@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,7 @@ public class Skill {
 	   private String name;
 	   
 	   @ManyToMany()
+	   @JsonIgnore
 	   @JoinTable(
 			   name = "resume_skills", 
 			   joinColumns = @JoinColumn(name = "skill_id"), 

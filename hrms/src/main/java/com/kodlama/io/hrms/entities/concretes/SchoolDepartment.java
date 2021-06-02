@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,10 +35,11 @@ public class SchoolDepartment {
 	   
 	   @ManyToOne()
 	   @JoinColumn(name =  "school_id")
+	   @JsonIgnore
 	   private School school;
 	   
-	   
 	   @OneToMany(mappedBy="schoolDepartment")
+	   @JsonIgnore
 	   Set<EmployeeSchoolDepartment> employeeSchoolDepartments;
 	   
 
