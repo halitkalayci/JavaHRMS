@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.kodlama.io.hrms.business.abstracts.SkillService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
+import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
 import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.SkillDao;
 import com.kodlama.io.hrms.entities.concretes.Skill;
+import com.kodlama.io.hrms.entities.dtos.SkillDetailsDto;
 
 @Service
 public class SkillManager implements SkillService {
@@ -23,8 +25,15 @@ public class SkillManager implements SkillService {
 	}
 
 	@Override
-	public DataResult<List<Skill>> findByResume_Id(int id) {
-		return new SuccessDataResult<List<Skill>>(skillDao.findByResume_Id(id));
+	public DataResult<List<SkillDetailsDto>> findByResume_Id(int id) {
+		return new SuccessDataResult<List<SkillDetailsDto>>(skillDao.findByResume_ResumeId(id));
+	}
+
+	@Override
+	public DataResult<Skill> findById(int id) {
+		Skill skill = skillDao.getOne(id);
+		if(skill==null) return new ErrorDataResult<Skill>();
+		return new SuccessDataResult<Skill>(skill);
 	}
 
 }

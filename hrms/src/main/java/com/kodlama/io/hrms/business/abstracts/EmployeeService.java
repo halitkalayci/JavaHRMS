@@ -10,4 +10,5 @@ import com.kodlama.io.hrms.entities.dtos.EmployeeForRegisterDto;
 public interface EmployeeService {
      DataResult<List<Employee>> getAll();
      Result register(EmployeeForRegisterDto employee);
+     DataResult<Employee> getById(int id);
 }

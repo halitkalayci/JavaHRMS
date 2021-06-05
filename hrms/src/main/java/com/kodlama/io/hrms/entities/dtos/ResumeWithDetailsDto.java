@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.kodlama.io.hrms.entities.concretes.Employee;
 import com.kodlama.io.hrms.entities.concretes.JobExperience;
-import com.kodlama.io.hrms.entities.concretes.Skill;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +27,7 @@ public class ResumeWithDetailsDto {
     private List<JobExperience> jobExperiences;
     private List<SchoolDepartmentDetailsDto> schoolDepartments;
     private List<ForeignLanguageDetailsDto> foreignLanguages;
-    private List<Skill> skills;
+    private List<SkillDetailsDto> skills;
 
 	public ResumeWithDetailsDto(int id, String githubAddress, String linkedinAddress, String coverLetter,
 			String picture, Date createDate, Employee employee) {

@@ -13,6 +13,7 @@ import com.kodlama.io.hrms.business.abstracts.UserService;
 import com.kodlama.io.hrms.core.utilities.IdentityValidationService;
 import com.kodlama.io.hrms.core.utilities.business.BusinessRules;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
+import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
 import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
@@ -90,6 +91,13 @@ public class EmployeeManager implements EmployeeService{
 		if(employeeDao.findByNationalityId(nationalityId) != null)
 			return new ErrorResult("Bu TCKN ile başka bir kullanıcı mevcut.");
 		return new SuccessResult();
+	}
+
+	@Override
+	public DataResult<Employee> getById(int id) {
+		Employee employee = employeeDao.getOne(id);
+		if(employee==null) return new ErrorDataResult<Employee>();
+		return new SuccessDataResult<Employee>(employee);
 	}
 
 }

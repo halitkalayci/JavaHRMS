@@ -5,11 +5,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.kodlama.io.hrms.entities.serializers.EmployeeSchoolDepartmentId;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +18,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="employee_school_departments")
-@IdClass(EmployeeSchoolDepartmentId.class)
 public class EmployeeSchoolDepartment {
 	
 	@Id
+	@Column(name="employee_school_department_id")
+	private int id;
+
     @ManyToOne
     @JoinColumn(name="employee_id")
     private Employee employee;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(name="school_department_id")
     private SchoolDepartment schoolDepartment;
@@ -40,6 +40,16 @@ public class EmployeeSchoolDepartment {
 	@Column(name = "graduate_date")
 	private Date graduateDate;
 
+	public EmployeeSchoolDepartment(Employee employee, SchoolDepartment schoolDepartment, Date startDate,
+			Date graduateDate) {
+		super();
+		this.employee = employee;
+		this.schoolDepartment = schoolDepartment;
+		this.startDate = startDate;
+		this.graduateDate = graduateDate;
+	}
+
+	
 
 
 }
