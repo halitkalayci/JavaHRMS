@@ -1,7 +1,9 @@
 package com.kodlama.io.hrms.entities.concretes;
 
 
+
 import java.util.Date;
+
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,8 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -65,12 +65,22 @@ public class Resume {
 	 @JsonIgnore()
 	 Set<ResumeForeignLanguage> resumeForeignLanguages;
 	 
+	 @OneToMany(mappedBy="resume")
+	 @JsonIgnore()
+	 Set<ResumeSkill> resumeSkills;
 	 
-	 @ManyToMany()
-	 @JsonIgnore
-	 @JoinTable(
-			   name = "resume_skills", 
-			   joinColumns = @JoinColumn(name = "resume_id"), 
-			   inverseJoinColumns = @JoinColumn(name = "skill_id"))
-	 private Set<Skill> skills;
+	 
+	public Resume(String githubAddress, String linkedinAddress, String coverLetter, String picture, 
+			Employee employee) {
+		super();
+		this.githubAddress = githubAddress;
+		this.linkedinAddress = linkedinAddress;
+		this.coverLetter = coverLetter;
+		this.picture = picture;
+		this.createDate = new Date();
+		this.employee = employee;
+	}
+	 
+	 
+	 
 }

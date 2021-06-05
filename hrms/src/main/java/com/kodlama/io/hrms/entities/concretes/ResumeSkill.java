@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,34 +17,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="resume_foreign_languages")
-public class ResumeForeignLanguage {
+@Table(name="resume_skills")
+public class ResumeSkill {
 
 	@Id
-	@Column(name="resume_foreign_language_id")
+	@Column(name="resume_skill_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
+	private int resume_skill_id;
+	
     @ManyToOne
     @JoinColumn(name="resume_id")
     private Resume resume;
     
     @ManyToOne
-    @JoinColumn(name="foreign_language_id")
-    private ForeignLanguage foreignLanguage;
+    @JoinColumn(name="skill_id")
+    private Skill skill;
     
     
-	@Column(name = "ratio")
-	private int ratio;
+	@Column(name = "level")
+	private int level;
 
 
-	public ResumeForeignLanguage(Resume resume, ForeignLanguage foreignLanguage, int ratio) {
+	public ResumeSkill(Resume resume, Skill skill, int level) {
 		super();
 		this.resume = resume;
-		this.foreignLanguage = foreignLanguage;
-		this.ratio = ratio;
+		this.skill = skill;
+		this.level = level;
 	}
+	 
 	
-	
-
 }

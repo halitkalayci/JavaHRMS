@@ -9,6 +9,7 @@ import com.kodlama.io.hrms.business.abstracts.ForeignLanguageService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.ForeignLanguageDao;
+import com.kodlama.io.hrms.entities.concretes.ForeignLanguage;
 import com.kodlama.io.hrms.entities.dtos.ForeignLanguageDetailsDto;
 
 @Service
@@ -26,6 +27,12 @@ public class ForeignLanguageManager implements ForeignLanguageService {
 	@Override
 	public DataResult<List<ForeignLanguageDetailsDto>> findByResume_Id(int id) {
 		return new SuccessDataResult<List<ForeignLanguageDetailsDto>>(foreignLanguageDao.findByResume_ResumeId(id));
+	}
+
+
+	@Override
+	public DataResult<ForeignLanguage> findById(int id) {
+		return new SuccessDataResult<ForeignLanguage>( foreignLanguageDao.getOne( id ));
 	}
 
 }

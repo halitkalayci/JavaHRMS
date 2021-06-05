@@ -1,8 +1,11 @@
 package com.kodlama.io.hrms;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -26,5 +29,6 @@ public class HrmsApplication {
           .paths(PathSelectors.any())                          
           .build();                                           
     }
+	
 
 }

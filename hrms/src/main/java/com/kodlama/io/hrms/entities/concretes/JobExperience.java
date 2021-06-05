@@ -43,4 +43,15 @@ public class JobExperience {
       @JoinColumn(name="resume_id")
       @JsonIgnore
       private Resume resume;
+
+	public JobExperience(String officeName, String position, Date startDate, Date endDate, Resume resume) {
+		super();
+		this.officeName = officeName;
+		this.position = position;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.resume = resume;
+	}
+      
+      
 }
