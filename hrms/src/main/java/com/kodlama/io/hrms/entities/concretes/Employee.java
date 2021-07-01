@@ -54,6 +54,10 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	@JsonIgnore()
 	Set<Resume> resumees;
+	
+	@OneToMany(mappedBy="employee")
+	@JsonIgnore()
+	Set<EmployeeJobAdvertisementFavorite> employeeJobAdvertisementFavorites;
 
 	public Employee(int userId, String firstName, String lastName, String nationalityId, Date birthOfDate) {
 		this.userId = userId;

@@ -34,7 +34,7 @@ import com.kodlama.io.hrms.entities.dtos.ResumeWithDetailsDto;
 
 @Service
 public class ResumeManager implements ResumeService{
-
+  
 	private ResumeDao resumeDao;
 	private SchoolDepartmentService schoolDepartmentService;
 	private JobExperienceService jobExperienceService;
@@ -114,6 +114,12 @@ public class ResumeManager implements ResumeService{
 
 		
 		return new SuccessResult("CV başarıyla kaydedildi.");
+	}
+
+
+	@Override
+	public DataResult<List<Resume>> getAllByEmployeeId(int id) {
+		return new SuccessDataResult<List<Resume>>(resumeDao.getAllByEmployee_UserId(id));
 	}
 
 	

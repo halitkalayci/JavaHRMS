@@ -18,6 +18,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.EmployerDao;
 import com.kodlama.io.hrms.entities.concretes.Employer;
 import com.kodlama.io.hrms.entities.concretes.User;
+import com.kodlama.io.hrms.entities.dtos.EmployerForLoginDto;
 import com.kodlama.io.hrms.entities.dtos.EmployerForRegisterDto;
 
 @Service
@@ -63,6 +64,18 @@ public class EmployerManager implements EmployerService {
 		return new SuccessDataResult<Employer>(employer);
 	}
 
+	@Override
+	public DataResult<Employer> login(EmployerForLoginDto employer) {
+		Employer employerToLogin = employerDao.getByPhoneAndUser_Password(employer.getPhone(),employer.getPassword());
+		if(employerToLogin==null) return new ErrorDataResult<Employer>("Giriş bilgileriniz hatalı. Lütfen kontrol ediniz.");
+		
+		Result businessRulesResult = BusinessRules.run(
+				isEmployerVerified(employerToLogin));
+		if(businessRulesResult != null) return new ErrorDataResult<Employer>(businessRulesResult.getMessage());
+		
+		return new SuccessDataResult<Employer>(employerToLogin,"Giriş başarılı");
+	}
+
 	
 	private Result isPasswordsSame(String password, String passwordConfirm) {
 		if(!password.equals(passwordConfirm)) return new ErrorResult("Şifreleriniz uyuşmuyor.");
@@ -77,7 +90,12 @@ public class EmployerManager implements EmployerService {
 		if(userService.getByEmail(email).getData() != null) return new ErrorResult("Bu e-posta adresiyle kayıtlı bir kullanıcı var.");
 		return null;
 	}
+	private Result isEmployerVerified(Employer employer) {
+		if(employer.isVerifiedBySystem()) return new SuccessResult();
+		return new ErrorResult("Üyeliğiniz henüz aktifleştirilmemiştir. Lütfen ekiplerimizin üyeliğinizi aktifleştirmesini bekleyin.");
+	}
 
+	
 
 	
 

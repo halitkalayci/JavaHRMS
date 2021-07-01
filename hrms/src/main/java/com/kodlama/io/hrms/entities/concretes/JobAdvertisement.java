@@ -1,6 +1,7 @@
 package com.kodlama.io.hrms.entities.concretes;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,6 +54,17 @@ public class JobAdvertisement {
 	@Column(name="isActive",nullable=false)
 	private boolean isActive;
 	
+	@Column(name="is_approved",nullable=false)
+	private boolean isApproved;
+	
+	@ManyToOne()
+	@JoinColumn(name="workingtype_id")
+	private JobAdvertisementWorkingType workingType;
+	
+	@ManyToOne()
+	@JoinColumn(name="workingtime_id")
+	private JobAdvertisementWorkingTime workingTime;
+	
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade={ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name="cityid")
@@ -63,6 +77,10 @@ public class JobAdvertisement {
 	@ManyToOne(fetch = FetchType.LAZY, cascade={ CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name="employerid")
 	private Employer employer;
+	
+	@OneToMany(mappedBy="jobAdvertisement")
+	@JsonIgnore()
+	Set<EmployeeJobAdvertisementFavorite> employeeJobAdvertisementFavorites;
 
 	public JobAdvertisement(String jobDescription, Double minSalary, Double maxSalary, int openPositionCount,
 			Date lastApplyDate, Date createDate, boolean isActive) {

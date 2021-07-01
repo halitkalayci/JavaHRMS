@@ -2,7 +2,6 @@ package com.kodlama.io.hrms.api.controllers;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -15,49 +14,40 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.kodlama.io.hrms.business.abstracts.ResumeService;
-import com.kodlama.io.hrms.core.utilities.results.DataResult;
+import com.kodlama.io.hrms.business.abstracts.EmployerUpdateRequestService;
 import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
-import com.kodlama.io.hrms.entities.concretes.Resume;
-import com.kodlama.io.hrms.entities.dtos.ResumeForAddDto;
-import com.kodlama.io.hrms.entities.dtos.ResumeWithDetailsDto;
+import com.kodlama.io.hrms.core.utilities.results.Result;
+import com.kodlama.io.hrms.entities.dtos.EmployerUpdateRequestForAddDto;
+
 
 @RestController
-@RequestMapping("/api/resumees")
+@RequestMapping("/api/employerupdaterequests")
 @CrossOrigin
-public class ResumeesController {
+public class EmployerUpdateRequestsController {
 
-	private ResumeService resumeService;
-
+	private EmployerUpdateRequestService employerUpdateRequestService;
 	@Autowired
-	public ResumeesController(ResumeService resumeService) {
+	public EmployerUpdateRequestsController(EmployerUpdateRequestService employerUpdateRequestService) {
 		super();
-		this.resumeService = resumeService;
+		this.employerUpdateRequestService = employerUpdateRequestService;
 	}
 	
-	@PostMapping("/add")
-	public ResponseEntity<?> addNew(@Valid ResumeForAddDto resume) {
-		return ResponseEntity.ok(resumeService.add(resume));
+	@GetMapping("/canSubmitNewUpdateRequest")
+	public Result canSubmitNewUpdateRequest(int id){
+		return this.employerUpdateRequestService.canSubmitNewUpdateRequest(id);
 	}
-
-	@GetMapping("/getall")
-	public DataResult<List<Resume>> getAll(){
-		return this.resumeService.getAll();
+	@RequestMapping(value = "/addNew", method = RequestMethod.POST,
+		    consumes = {"multipart/form-data"})
+	public ResponseEntity<?> addNew(@Valid @RequestPart("updateRequest") EmployerUpdateRequestForAddDto employerUpdateRequestForAddDto, @RequestPart(name="avatar",required = false) MultipartFile avatar) {
+		return ResponseEntity.ok( this.employerUpdateRequestService.addNew(employerUpdateRequestForAddDto,avatar) );
 	}
-	@GetMapping("/getallByEmployeeId")
-	public DataResult<List<Resume>> getAllByEmployeeId(int id){
-		return this.resumeService.getAllByEmployeeId(id);
-	}
-	@GetMapping("/getDetailsById")
-	public DataResult<ResumeWithDetailsDto> getDetailsById(int id){
-		return this.resumeService.getResumeWithDetails(id);
-	}
-	
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -71,5 +61,4 @@ public class ResumeesController {
 		= new ErrorDataResult<Object>(validationErrors,"Doğrulama hataları");
 		return errors;
 	}
-
 }

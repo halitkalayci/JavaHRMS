@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.kodlama.io.hrms.business.abstracts.EmployerService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.ErrorDataResult;
 import com.kodlama.io.hrms.entities.concretes.Employer;
+import com.kodlama.io.hrms.entities.dtos.EmployerForLoginDto;
 import com.kodlama.io.hrms.entities.dtos.EmployerForRegisterDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.validation.FieldError;
 
 @RestController
 @RequestMapping("/api/employers")
+@CrossOrigin
 public class EmployersController {
 
 	private EmployerService employerService;
@@ -41,6 +44,18 @@ public class EmployersController {
 	public DataResult<List<Employer>> getAll(){
 		return this.employerService.getAll();
 	}
+	
+	@GetMapping("/getbyId")
+	public DataResult<Employer> getById(int id){
+		return this.employerService.getById(id);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@Valid @RequestBody EmployerForLoginDto employer) {
+		return ResponseEntity.ok( this.employerService.login(employer) );
+	}
+	
+	
 	@PostMapping("/register")
 	public ResponseEntity<?> add(@Valid @RequestBody EmployerForRegisterDto employer) {
 		return ResponseEntity.ok( this.employerService.register(employer) );

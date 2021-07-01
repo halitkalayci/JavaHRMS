@@ -1,5 +1,6 @@
 package com.kodlama.io.hrms.entities.concretes;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ public class JobExperience {
       private String position;
       
       @Column(name = "start_date",nullable=false)
-      private Date startDate;
+      private LocalDate startDate;
       
       @Column(name = "end_date",nullable=true)
       private Date endDate;
@@ -44,7 +45,7 @@ public class JobExperience {
       @JsonIgnore
       private Resume resume;
 
-	public JobExperience(String officeName, String position, Date startDate, Date endDate, Resume resume) {
+	public JobExperience(String officeName, String position, LocalDate startDate, Date endDate, Resume resume) {
 		super();
 		this.officeName = officeName;
 		this.position = position;

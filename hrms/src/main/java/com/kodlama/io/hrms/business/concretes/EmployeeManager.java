@@ -21,6 +21,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.EmployeeDao;
 import com.kodlama.io.hrms.entities.concretes.Employee;
 import com.kodlama.io.hrms.entities.concretes.User;
+import com.kodlama.io.hrms.entities.dtos.EmployeeForLoginDto;
 import com.kodlama.io.hrms.entities.dtos.EmployeeForRegisterDto;
 
 @Service
@@ -73,7 +74,25 @@ public class EmployeeManager implements EmployeeService{
 	}
 	
 	
-	
+	@Override
+	public DataResult<Employee> getById(int id) {
+		Employee employee = employeeDao.getOne(id);
+		if(employee==null) return new ErrorDataResult<Employee>();
+		return new SuccessDataResult<Employee>(employee);
+	}
+
+	@Override
+	public DataResult<Employee> login(EmployeeForLoginDto employee) {
+		Employee employeeToLogin = employeeDao.findByUser_EmailAndUser_Password(employee.getEmail(), employee.getPassword());
+		
+		if(employeeToLogin==null) return new ErrorDataResult<Employee>("Giriş bilgileri hatalı veya eksik. Lütfen kontrol ediniz.");
+		Result businessRules = BusinessRules.run(
+				 isEmployeeEmailVerified(employeeToLogin)
+				);
+		if(businessRules!=null) return new ErrorDataResult<Employee>(businessRules.getMessage());
+		
+		return new SuccessDataResult<Employee>(employeeToLogin,"Giriş başarılı.");
+	}
 	
 	private Result isPasswordsMatch(String password, String passwordVerify) {
 		if(!password.equals(passwordVerify)) {
@@ -93,11 +112,11 @@ public class EmployeeManager implements EmployeeService{
 		return new SuccessResult();
 	}
 
-	@Override
-	public DataResult<Employee> getById(int id) {
-		Employee employee = employeeDao.getOne(id);
-		if(employee==null) return new ErrorDataResult<Employee>();
-		return new SuccessDataResult<Employee>(employee);
+	
+	
+	private Result isEmployeeEmailVerified(Employee employee) {
+		if(!employee.getUser().isEmailVerified()) return new ErrorResult("E-posta adresinizi doğrulamadan sisteme giriş yapamazsınız.");
+		return new SuccessResult();
 	}
 
 }

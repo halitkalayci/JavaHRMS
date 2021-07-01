@@ -8,4 +8,5 @@ import com.kodlama.io.hrms.entities.concretes.Employee;
 
 public interface EmployeeDao extends JpaRepository<Employee,Integer>{
       Employee findByNationalityId(String nationalityId);
+      Employee findByUser_EmailAndUser_Password(String email,String password);
 }
