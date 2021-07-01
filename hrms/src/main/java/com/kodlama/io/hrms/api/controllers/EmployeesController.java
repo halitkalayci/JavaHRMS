@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kodlama.io.hrms.business.abstracts.EmployeeService;
 import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.entities.concretes.Employee;
+import com.kodlama.io.hrms.entities.dtos.EmployeeForLoginDto;
 import com.kodlama.io.hrms.entities.dtos.EmployeeForRegisterDto;
 @RestController
 @RequestMapping("/api/employees")
+@CrossOrigin
 public class EmployeesController {
 
 	private EmployeeService employeeService;
@@ -36,6 +39,11 @@ public class EmployeesController {
 	@PostMapping("/register")
 	public ResponseEntity<?> add(@Valid @RequestBody EmployeeForRegisterDto employee) {
 		return ResponseEntity.ok( this.employeeService.register(employee) );
+	}
+	
+	@PostMapping("/login")
+	public DataResult<Employee> login(@RequestBody EmployeeForLoginDto employee){
+		return employeeService.login(employee);
 	}
 	
 }

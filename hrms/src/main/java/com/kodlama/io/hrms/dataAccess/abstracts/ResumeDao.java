@@ -2,6 +2,8 @@ package com.kodlama.io.hrms.dataAccess.abstracts;
 
 
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,5 +19,5 @@ public interface ResumeDao extends JpaRepository<Resume, Integer>{
 			+ "From Resume r JOIN r.employee e Where r.id=:id")
 	ResumeWithDetailsDto getResumeWithDetailsById(int id);
 
-	
+	List<Resume> getAllByEmployee_UserId(int userId);
 }

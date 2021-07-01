@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kodlama.io.hrms.business.abstracts.CityService;
@@ -19,6 +22,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.JobAdvertisementDao;
 import com.kodlama.io.hrms.entities.concretes.JobAdvertisement;
 import com.kodlama.io.hrms.entities.dtos.JobAdvertisementForAddDto;
+
 
 
 @Service
@@ -99,6 +103,24 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 	}
 	
 
+
+	@Override
+	public DataResult<List<JobAdvertisement>> findByIsActiveTrueAndIsApprovedTrue() {
+		return new SuccessDataResult<List<JobAdvertisement>>(jobAdvertisementDao.findByIsActiveTrueAndIsApprovedTrue());
+	}
+
+
+
+
+	@Override
+	public DataResult<List<JobAdvertisement>> findByIsActiveTrueAndIsApprovedTruePageable(int page, int size) {
+		Pageable pageable = PageRequest.of(page,size);
+		Page<JobAdvertisement> result = jobAdvertisementDao.findByIsActiveTrueAndIsApprovedTrue(pageable);
+		return new SuccessDataResult<List<JobAdvertisement>>(result.getContent());
+	}
+
+	
+
 	@Override
 	public Result changeStatus(int advertisementId, int employerId) {
 		JobAdvertisement jobAdvertisementToUpdate = jobAdvertisementDao.findByIdAndEmployer_UserId(advertisementId, employerId);
@@ -107,6 +129,18 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		jobAdvertisementDao.save(jobAdvertisementToUpdate);
 		return new SuccessResult("Belirtilen iş ilanı " + (jobAdvertisementToUpdate.isActive() ? "aktif" : "pasif") + " hale getirildi.");
 	}
+	
+
+	@Override
+	public DataResult<List<JobAdvertisement>> findByUserFavorites(int userId) {
+		return new SuccessDataResult<List<JobAdvertisement>>(this.jobAdvertisementDao.findUserFavoriteJobAds(userId));
+	}
+
+	@Override
+	public DataResult<JobAdvertisement> findById(int id) {
+		return new SuccessDataResult<JobAdvertisement>(this.jobAdvertisementDao.getOne(id));
+	}
+
 	
 	private Result isJobPositionValid(int id) {
 		if(id<=0) return new ErrorResult("İş pozisyonu doğru girilmedi.");
@@ -133,6 +167,13 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		}
 		return new SuccessResult();
 	}
+
+
+
+
+
+
+
 
 
 

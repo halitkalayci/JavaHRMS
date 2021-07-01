@@ -36,4 +36,6 @@ public class JobPosition {
 
 	@OneToMany(mappedBy = "jobPosition",fetch = FetchType.LAZY)
 	private List<JobAdvertisement> jobAdvertisements;
+	
+
 }

@@ -11,5 +11,6 @@ import com.kodlama.io.hrms.entities.dtos.ResumeWithDetailsDto;
 public interface ResumeService {
 	DataResult<ResumeWithDetailsDto> getResumeWithDetails(int id);
 	DataResult<List<Resume>> getAll();
+	DataResult<List<Resume>> getAllByEmployeeId(int id);
 	Result add(ResumeForAddDto resume);
 }

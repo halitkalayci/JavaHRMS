@@ -12,11 +12,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @Table(name="Employers")
@@ -40,6 +42,9 @@ public class Employer {
 	
 	@Column(name="`Website`")
 	private String website;
+
+	@Column(name="avatar_path")
+	private String avatarPath;
 	
 	@OneToOne(fetch = FetchType.LAZY)	
 	@JoinColumn(name="`UserId`")
@@ -47,6 +52,10 @@ public class Employer {
 	
 	@OneToMany(mappedBy="employer",fetch = FetchType.LAZY)
 	private List<JobAdvertisement> jobAdvertisements;
+	
+	@OneToMany(mappedBy = "employer")
+	@JsonIgnore()
+	private List<EmployerUpdateRequest> updateRequests;
 	
 	public Employer(int userId, String companyName, String phone, boolean verifiedBySystem, String website) {
 		this.userId = userId;

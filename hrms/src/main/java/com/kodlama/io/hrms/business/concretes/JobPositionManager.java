@@ -14,6 +14,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessDataResult;
 import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.JobPositionDao;
 import com.kodlama.io.hrms.entities.concretes.JobPosition;
+import com.kodlama.io.hrms.entities.dtos.JobPositionForListingDto;
 
 @Service
 public class JobPositionManager implements JobPositionService {
@@ -51,6 +52,11 @@ public class JobPositionManager implements JobPositionService {
 		JobPosition jobPosition = jobPositionDao.findById(id);
 		if(jobPosition==null) return new ErrorDataResult<JobPosition>();
 	    return new SuccessDataResult<JobPosition>(jobPosition);
+	}
+
+	@Override
+	public DataResult<List<JobPositionForListingDto>> getAllWithJobAdCount() {
+		return new SuccessDataResult<List<JobPositionForListingDto>>(jobPositionDao.getAllWithJobAdCount());
 	}
 	
 	
