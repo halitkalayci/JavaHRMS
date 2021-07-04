@@ -22,6 +22,7 @@ import com.kodlama.io.hrms.core.utilities.results.SuccessResult;
 import com.kodlama.io.hrms.dataAccess.abstracts.JobAdvertisementDao;
 import com.kodlama.io.hrms.entities.concretes.JobAdvertisement;
 import com.kodlama.io.hrms.entities.dtos.JobAdvertisementForAddDto;
+import com.kodlama.io.hrms.entities.dtos.JobAdvertisementWithPagingDto;
 
 
 
@@ -113,10 +114,11 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 
 
 	@Override
-	public DataResult<List<JobAdvertisement>> findByIsActiveTrueAndIsApprovedTruePageable(int page, int size) {
+	public DataResult<JobAdvertisementWithPagingDto> findByIsActiveTrueAndIsApprovedTruePageable(int page, int size) {
 		Pageable pageable = PageRequest.of(page,size);
 		Page<JobAdvertisement> result = jobAdvertisementDao.findByIsActiveTrueAndIsApprovedTrue(pageable);
-		return new SuccessDataResult<List<JobAdvertisement>>(result.getContent());
+		JobAdvertisementWithPagingDto jobAdvertisementWithPagingDto = new JobAdvertisementWithPagingDto(result.getContent(), result.getTotalPages());
+		return new SuccessDataResult<JobAdvertisementWithPagingDto>(jobAdvertisementWithPagingDto);
 	}
 
 	

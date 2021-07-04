@@ -17,6 +17,7 @@ import com.kodlama.io.hrms.core.utilities.results.DataResult;
 import com.kodlama.io.hrms.core.utilities.results.Result;
 import com.kodlama.io.hrms.entities.concretes.JobAdvertisement;
 import com.kodlama.io.hrms.entities.dtos.JobAdvertisementForAddDto;
+import com.kodlama.io.hrms.entities.dtos.JobAdvertisementWithPagingDto;
 
 @RestController
 @RequestMapping("/api/jobadvertisements")
@@ -49,7 +50,7 @@ public class JobAdvertisementsController {
 		return this.jobAdvertisementService.findByIsActiveTrueAndIsApprovedTrue();
 	}
 	@GetMapping("/getAllWithPaging")
-	public DataResult<List<JobAdvertisement>> getAllWithPaging(@RequestParam int page, @RequestParam int size){
+	public DataResult<JobAdvertisementWithPagingDto> getAllWithPaging(@RequestParam int page, @RequestParam int size){
 		return this.jobAdvertisementService.findByIsActiveTrueAndIsApprovedTruePageable(page-1,size);
 	}
 
